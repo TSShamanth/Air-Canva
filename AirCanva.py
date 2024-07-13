@@ -3,11 +3,9 @@ import cv2
 import mediapipe as mp
 from collections import deque
 
-
 # Function to set trackbar values
 def setValues(x):
     pass
-
 
 # Create a window named 'Color detectors'
 cv2.namedWindow("Color detectors")
@@ -20,13 +18,13 @@ cv2.createTrackbar("Lower Hue", "Color detectors", 64, 180, setValues)
 cv2.createTrackbar("Lower Saturation", "Color detectors", 72, 255, setValues)
 cv2.createTrackbar("Lower Value", "Color detectors", 49, 255, setValues)
 
-# Initialize deque points for each color
-bpoints = [deque(maxlen=1024)]
-gpoints = [deque(maxlen=1024)]
-rpoints = [deque(maxlen=1024)]
-ypoints = [deque(maxlen=1024)]
+# Initialize deque points for drawing
+bpoints = [deque(maxlen=512)]
+gpoints = [deque(maxlen=512)]
+rpoints = [deque(maxlen=512)]
+ypoints = [deque(maxlen=512)]
 
-# Color indices
+# Color indices and default color
 blue_index = 0
 green_index = 0
 red_index = 0
@@ -35,7 +33,7 @@ yellow_index = 0
 # Kernel for morphological operations
 kernel = np.ones((5, 5), np.uint8)
 
-# Colors and indices
+# Colors and corresponding indices
 colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (0, 255, 255)]
 colorindex = 0
 
@@ -56,7 +54,7 @@ cv2.namedWindow('Paint', cv2.WINDOW_AUTOSIZE)
 
 # Initialize MediaPipe hands module
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5)
+hands = mpHands.Hands(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 mpDraw = mp.solutions.drawing_utils
 
 # Start capturing video
@@ -68,7 +66,7 @@ while True:
     if not ret:
         break
 
-    # Flip the frame to see same side of yours
+    # Flip the frame to see the same side of yours
     frame = cv2.flip(frame, 1)
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -83,7 +81,7 @@ while True:
     Lower_hsv = np.array([l_hue, l_saturation, l_value])
 
     # Create color selection rectangles
-    frame = cv2.rectangle(frame, (40, 1), (140, 65), (122, 122, 122), -1)
+    frame = cv2.rectangle(frame, (40, 1), (140, 65), (0, 0, 0), -1)
     frame = cv2.rectangle(frame, (160, 1), (255, 65), colors[0], -1)
     frame = cv2.rectangle(frame, (275, 1), (370, 65), colors[1], -1)
     frame = cv2.rectangle(frame, (390, 1), (485, 65), colors[2], -1)
@@ -110,60 +108,53 @@ while True:
                 xList.append(x)
                 yList.append(y)
 
-            center = (xList[8], yList[8])  # Using the tip of the index finger
+            index_tip = (xList[8], yList[8])  # Index finger tip
+            index_dip = (xList[7], yList[7])  # Index finger DIP joint
 
-            # Buffer space of 20 pixels below buttons
-            if center[1] <= 85:
-                if 40 <= center[0] <= 140:  # Clear Button
-                    bpoints = [deque(maxlen=512)]
-                    gpoints = [deque(maxlen=512)]
-                    rpoints = [deque(maxlen=512)]
-                    ypoints = [deque(maxlen=512)]
+            # Check if index finger is extended
+            if index_tip and index_dip:
+                dist = np.sqrt((index_tip[0] - index_dip[0]) ** 2 + (index_tip[1] - index_dip[1]) ** 2)
+                if dist > 30:  # Adjust threshold as per your need
+                    # Check if the index finger is within the bounds of the color buttons
+                    if 40 <= index_tip[0] <= 140 and 1 <= index_tip[1] <= 65:
+                        # Clear all points
+                        bpoints = [deque(maxlen=512)]
+                        gpoints = [deque(maxlen=512)]
+                        rpoints = [deque(maxlen=512)]
+                        ypoints = [deque(maxlen=512)]
+                        paintWindow = np.zeros((471, 636, 3), dtype=np.uint8) + 255
+                    elif 160 <= index_tip[0] <= 255 and 1 <= index_tip[1] <= 65:
+                        colorindex = 0
+                    elif 275 <= index_tip[0] <= 370 and 1 <= index_tip[1] <= 65:
+                        colorindex = 1
+                    elif 390 <= index_tip[0] <= 485 and 1 <= index_tip[1] <= 65:
+                        colorindex = 2
+                    elif 505 <= index_tip[0] <= 600 and 1 <= index_tip[1] <= 65:
+                        colorindex = 3
+                    else:
+                        # Draw only when finger is extended and not near the color buttons
+                        if colorindex == 0:
+                            bpoints[blue_index].appendleft(index_tip)
+                        elif colorindex == 1:
+                            gpoints[green_index].appendleft(index_tip)
+                        elif colorindex == 2:
+                            rpoints[red_index].appendleft(index_tip)
+                        elif colorindex == 3:
+                            ypoints[yellow_index].appendleft(index_tip)
 
-                    blue_index = 0
-                    green_index = 0
-                    red_index = 0
-                    yellow_index = 0
-
-                    paintWindow[67:, :, :] = 255
-                elif 160 <= center[0] <= 255:
-                    colorindex = 0  # Blue
-                elif 275 <= center[0] <= 370:
-                    colorindex = 1  # Green
-                elif 390 <= center[0] <= 485:
-                    colorindex = 2  # Red
-                elif 505 <= center[0] <= 600:
-                    colorindex = 3  # Yellow
-            else:
-                if colorindex == 0:
-                    bpoints[blue_index].appendleft(center)
-                elif colorindex == 1:
-                    gpoints[green_index].appendleft(center)
-                elif colorindex == 2:
-                    rpoints[red_index].appendleft(center)
-                elif colorindex == 3:
-                    ypoints[yellow_index].appendleft(center)
-    else:
-        bpoints.append(deque(maxlen=512))
-        blue_index += 1
-        gpoints.append(deque(maxlen=512))
-        green_index += 1
-        rpoints.append(deque(maxlen=512))
-        red_index += 1
-        ypoints.append(deque(maxlen=512))
-        yellow_index += 1
-
+    # Draw on the paint window
     points = [bpoints, gpoints, rpoints, ypoints]
     for i in range(len(points)):
         for j in range(len(points[i])):
             for k in range(1, len(points[i][j])):
                 if points[i][j][k - 1] is None or points[i][j][k] is None:
                     continue
-                cv2.line(frame, points[i][j][k - 1], points[i][j][k], colors[i], 2)
                 cv2.line(paintWindow, points[i][j][k - 1], points[i][j][k], colors[i], 2)
+                cv2.line(frame, points[i][j][k - 1], points[i][j][k], colors[i], 2)
 
-    cv2.imshow("Tracking", frame)
+    # Show the windows
     cv2.imshow("Paint", paintWindow)
+    cv2.imshow("Frame", frame)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
