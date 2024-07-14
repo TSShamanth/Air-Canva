@@ -36,7 +36,7 @@ def load_dataset(dataset_path):
     return images, labels, class_names
 
 
-dataset_path = r'D:\Shashank\archive'
+dataset_path = 'YOUR PATH'
 images, labels, class_names = load_dataset(dataset_path)
 
 # Split the dataset
