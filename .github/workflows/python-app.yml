@@ -37,25 +37,8 @@ jobs:
 
     - name: Run AirCanva script
       run: |
-        python AirCanva.py
+        python https://github.com/TSShamanth/Air-Canva/blob/master/AirCanva.py
 
     - name: Test with pytest
       run: |
         pytest
-
-    - name: Show directory contents
-      run: |
-        echo "Listing root directory contents"
-        ls -al
-        echo "Listing directory contents where script is located"
-        ls -al path/to/your/script
-
-    - name: Debug Environment Variables
-      run: |
-        echo "Listing environment variables"
-        printenv
-
-    - name: Check Installed Packages
-      run: |
-        echo "Listing installed packages"
-        pip list
