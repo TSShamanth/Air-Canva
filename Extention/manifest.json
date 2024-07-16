@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "AirCanva Extension",
+  "description": "Interactive painting tool using hand gestures with OpenCV and MediaPipe.",
+  "version": "1.0",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "http://127.0.0.1:5000"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "Webpage.html",
+    "default_icon": {
+      "16": "images/icon16.jpeg",
+      "48": "images/icon48.jpeg",
+      "128": "images/icon128.jpeg"
+    }
+  },
+  "icons": {
+    "16": "images/icon16.jpeg",
+    "48": "images/icon48.jpeg",
+    "128": "images/icon128.jpeg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "Webpage.html",
+        "images/icon16.jpeg",
+        "images/icon48.jpeg",
+        "images/icon128.jpeg"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
