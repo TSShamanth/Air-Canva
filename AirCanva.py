@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import mediapipe as mp
 from collections import deque
+import logging
 
 # Function to set trackbar values
 def setValues(x):
@@ -9,6 +10,8 @@ def setValues(x):
 
 # Function to run OpenCV functionality
 def run_opencv():
+    logging.info("Starting OpenCV...")
+    cv2.namedWindow("Color detectors")
     # Create a window named 'Color detectors'
     cv2.namedWindow("Color detectors")
 
