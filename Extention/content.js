@@ -1,6 +1,6 @@
 // Example content script to interact with Flask server
 function startOpenCV() {
-  fetch('http://127.0.0.1:5000/start-opencv', { method: 'POST' })
+  fetch('http://localhost:8080/start-opencv', { method: 'POST' })
     .then(response => response.text())
     .then(data => {
       console.log('Response:', data);
@@ -11,4 +11,5 @@ function startOpenCV() {
 }
 
 // Example event listener for a button click in your extension
-document.getElementById('start-opencv-button').addEventListener('click', startOpenCV);
+document.getElementById('startOpenCV').addEventListener('click', startOpenCV);
+

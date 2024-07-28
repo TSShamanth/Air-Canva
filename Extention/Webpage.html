@@ -8,19 +8,56 @@
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
+            background-color: #2e2e2e;
+            color: #f0f0f0;
+            width: 300px;
+            margin: 0 auto;
+            transition: background-color 0.3s ease;
+        }
+        h1 {
+            color: #f0f0f0;
+            text-align: center;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: center;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         button {
+            display: block;
+            margin: 0 auto;
+            margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        body:hover {
+            background-color: #e0e0e0;
+        }
+        body:hover h1,
+        body:hover p {
+            color: #555;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <h1>AirCanva Extension</h1>
-    <p>Click the button below to start the OpenCV functionality.</p>
-    <button id="startOpenCV">Start OpenCV</button>
-
-    <script src="Webpage.html"></script>
+    <p>Click the button below to start AirCanva.</p>
+    <button id="startAirCanva">Start AirCanva</button>
+    <script src="popup.js"> </script>
 </body>
 </html>

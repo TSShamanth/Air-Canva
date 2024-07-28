@@ -1,0 +1,23 @@
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.103:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+DEBUG:root:Received request to start OpenCV
+INFO:werkzeug:127.0.0.1 - - [28/Jul/2024 14:13:34] "POST /start-opencv HTTP/1.1" 200 -
+DEBUG:root:Received request to start OpenCV
+INFO:werkzeug:127.0.0.1 - - [28/Jul/2024 14:13:36] "POST /start-opencv HTTP/1.1" 200 -
+DEBUG:root:Received request to start OpenCV
+INFO:werkzeug:127.0.0.1 - - [28/Jul/2024 14:14:15] "POST /start-opencv HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.103:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [28/Jul/2024 14:18:18] "[33mPOST /start-opencv HTTP/1.1[0m" 404 -
+INFO:werkzeug:127.0.0.1 - - [28/Jul/2024 14:18:20] "[33mPOST /start-opencv HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.103:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m

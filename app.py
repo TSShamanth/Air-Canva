@@ -1,20 +1,16 @@
 import logging
 import threading
-
 from flask import Flask, render_template
-
 from AirCanva import run_opencv
+from flask_cors import CORS
 
-# Set up logging
 logging.basicConfig(level=logging.INFO)
-
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/")
 def index():
     return render_template("Webpage.html")
-
 
 @app.route("/start-opencv", methods=["POST"])
 def start_opencv():
@@ -28,6 +24,5 @@ def start_opencv():
         logging.error(f"Error starting OpenCV: {e}")
         return f"Error starting OpenCV: {e}"
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='localhost', port=8080)
